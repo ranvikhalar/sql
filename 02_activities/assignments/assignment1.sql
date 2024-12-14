@@ -166,18 +166,19 @@ Remember that money spent is quantity*cost_to_customer_per_qty.
 HINTS: you will need to AGGREGATE, GROUP BY, and filter...
 but remember, STRFTIME returns a STRING for your WHERE statement!! */
 
+/*option 1*/
 SELECT customer_id, strftime('%Y',market_date) AS year, strftime('%m', market_date) AS month, sum(quantity*cost_to_customer_per_qty) AS total_spent_in_april
 FROM customer_purchases
 WHERE CAST(month AS INT) = 04 AND CAST(year AS INT) = 2022
 GROUP BY customer_id, month, year;
 
-/*OR*/
+/*option 2*/
 SELECT customer_id, CAST(strftime('%Y',market_date) AS INT) AS year, CAST(strftime('%m', market_date) AS INT) AS month, sum(quantity*cost_to_customer_per_qty) AS total_spent_in_april
 FROM customer_purchases
 WHERE month = 04 AND year = 2022
 GROUP BY customer_id, month, year;
 
-/*OR*/
+/*Option 3*/
 SELECT customer_id, strftime('%Y',market_date) AS year, strftime('%m', market_date) AS month, sum(quantity*cost_to_customer_per_qty) AS total_spent_in_april
 FROM customer_purchases
 WHERE month = '04' AND year = '2022'
