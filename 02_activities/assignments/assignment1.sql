@@ -71,7 +71,7 @@ contains the word “pepper” (regardless of capitalization), and otherwise out
 SELECT product_id, product_name,
 CASE
 	WHEN product_qty_type = 'unit' THEN 'unit'
-	ELSE 'bulk'
+ELSE 'bulk'
 END AS prod_qty_type_condensed ,
 
 CASE
@@ -104,9 +104,10 @@ SELECT vendor_id, COUNT(booth_number) AS booth_counts
 FROM vendor_booth_assignments
 GROUP BY vendor_id;
 
-/*SELECT vendor_id, booth_number, COUNT(booth_number) AS booth_counts
+/* the number of times each vendor has rented each booth (extra question)*/
+SELECT vendor_id, booth_number, COUNT(booth_number) AS booth_counts
 FROM vendor_booth_assignments
-GROUP BY vendor_id, booth_number*/
+GROUP BY vendor_id, booth_number;
 
 
 /* 2. The Farmer’s Market Customer Appreciation Committee wants to give a bumper 
@@ -170,5 +171,15 @@ FROM customer_purchases
 WHERE CAST(month AS INT) = 04 AND CAST(year AS INT) = 2022
 GROUP BY customer_id, month, year;
 
+/*OR*/
+SELECT customer_id, CAST(strftime('%Y',market_date) AS INT) AS year, CAST(strftime('%m', market_date) AS INT) AS month, sum(quantity*cost_to_customer_per_qty) AS total_spent_in_april
+FROM customer_purchases
+WHERE month = 04 AND year = 2022
+GROUP BY customer_id, month, year;
 
+/*OR*/
+SELECT customer_id, strftime('%Y',market_date) AS year, strftime('%m', market_date) AS month, sum(quantity*cost_to_customer_per_qty) AS total_spent_in_april
+FROM customer_purchases
+WHERE month = '04' AND year = '2022'
+GROUP BY customer_id, month, year;
 
