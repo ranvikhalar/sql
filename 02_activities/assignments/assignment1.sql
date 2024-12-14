@@ -58,8 +58,8 @@ if the product_qty_type is “unit,” and otherwise displays the word “bulk.�
 
 SELECT product_id, product_name,
 CASE
-WHEN product_qty_type = 'unit' THEN 'unit'
-ELSE 'bulk'
+	WHEN product_qty_type = 'unit' THEN 'unit'
+	ELSE 'bulk'
 END AS prod_qty_type_condensed
 FROM product;
 
@@ -70,13 +70,13 @@ contains the word “pepper” (regardless of capitalization), and otherwise out
 
 SELECT product_id, product_name,
 CASE
-WHEN product_qty_type = 'unit' THEN 'unit'
-ELSE 'bulk'
+	WHEN product_qty_type = 'unit' THEN 'unit'
+	ELSE 'bulk'
 END AS prod_qty_type_condensed ,
 
 CASE
-WHEN product_name LIKE '%pepper%' THEN 1
-ELSE 0
+	WHEN product_name LIKE '%pepper%' THEN 1
+	ELSE 0
 END AS pepper_flag
 
 FROM product;
