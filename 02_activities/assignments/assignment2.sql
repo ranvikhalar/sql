@@ -178,7 +178,7 @@ CROSS JOIN
 (SELECT COUNT(DISTINCT customer_id) as unique_customers 
 FROM customer) c
 ) a
-GROUP BY a.vendor_name, a.product_name
+GROUP BY a.vendor_name, a.product_name;
 
 -- INSERT
 /*1.  Create a new table "product_units". 
@@ -236,3 +236,29 @@ When you have all of these components, you can run the update statement. */
 
 ALTER TABLE product_units
 ADD current_quantity INT;
+
+DROP TABLE IF EXISTS TEMP.last_quan;
+CREATE TEMP TABLE IF NOT EXISTS TEMP.last_quan
+(
+product_id INT,
+last_quantity INT
+);
+
+INSERT INTO TEMP.last_quan(product_id, last_quantity)
+SELECT a.product_id, a.last_quantity
+FROM(
+	SELECT product_id, market_date, 
+	coalesce(quantity, 0) as last_quantity,
+	ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY market_date DESC) as row_rank
+	FROM vendor_inventory
+	) as a
+WHERE a.row_rank = 1;
+
+UPDATE product_units
+SET current_quantity = coalesce(current_quantity,0)
+WHERE current_quantity IS NULL;
+
+UPDATE product_units
+SET current_quantity = last_quan.last_quantity
+FROM last_quan
+WHERE product_units.product_id = last_quan.product_id;
