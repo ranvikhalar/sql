@@ -124,7 +124,7 @@ HINT: There are a possibly a few ways to do this query, but if you're struggling
 3) Query the second temp table twice, once for the best day, once for the worst day, 
 with a UNION binding them. */
 
-/* Subquery method*/
+/* Subquery method */
 SELECT market_date, 
 sales_values,
 row_rank
